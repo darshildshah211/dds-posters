@@ -12,8 +12,9 @@ GREY = (90, 90, 90)
 LIGHT = (200, 200, 200)
 M = 80
 F = "/usr/share/fonts/truetype/ibm-plex/"
-DISCLAIMER = ("Investments in securities are subject to market risk. For informational "
-              "and educational purposes only; not investment advice.")
+DISCLAIMER = ("AMFI-registered Mutual Fund Distributor, ARN-359084. Mutual fund investments "
+              "are subject to market risks; read all scheme related documents carefully. "
+              "For informational and educational purposes only; not investment advice.")
 
 
 def fnt(name, size):
