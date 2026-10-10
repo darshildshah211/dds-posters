@@ -1,0 +1,40 @@
+name: LinkedIn publisher
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      check_only:
+        description: "Only test the LinkedIn login (posts nothing)"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: linkedin-publisher
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test login only
+        if: ${{ inputs.check_only }}
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        run: python3 scripts/li_publish.py --check
+      - name: Publish due posts
+        if: ${{ !inputs.check_only }}
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        run: python3 scripts/li_publish.py
+      - name: Save results
+        if: ${{ always() && !inputs.check_only }}
+        run: |
+          git config user.name "dds-publisher"
+          git config user.email "actions@users.noreply.github.com"
+          git add linkedin/queue
+          if ! git diff --cached --quiet; then
+            git commit -m "LinkedIn publisher: update queue"
+            for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break || sleep 5; done
+          fi
