@@ -1,0 +1,66 @@
+name: Decay reel (auto)
+# Every trading day at 15:37 IST: check Nifty ATM option decay / one-sided day via Upstox.
+# If triggered, render the reel and queue it; the Instagram publisher posts it within ~15 min.
+on:
+  schedule:
+    - cron: "7 10 * * 1-5"   # 10:07 UTC = 15:37 IST, Mon-Fri
+  workflow_dispatch:
+    inputs:
+      demo:
+        description: "Test run with sample data (renders only, posts nothing)"
+        type: boolean
+        default: true
+      force:
+        description: "Live data: make and post a reel even if today isn't triggered"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: decay-reel
+  cancel-in-progress: false
+jobs:
+  reel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check today's market
+        id: detect
+        env:
+          UPSTOX_TOKEN: ${{ secrets.UPSTOX_TOKEN }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.demo }}" = "true" ]; then ARGS="--demo --force"; fi
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          python3 reels_auto/detect.py $ARGS
+      - name: Install renderer
+        if: steps.detect.outputs.triggered == 'true'
+        run: |
+          pip install playwright numpy scipy
+          python3 -m playwright install --with-deps chromium
+          sudo apt-get install -y ffmpeg >/dev/null
+      - name: Render reel
+        if: steps.detect.outputs.triggered == 'true'
+        run: |
+          mkdir -p reels/auto
+          python3 reels_auto/render.py "reels/auto/$(date +%F)-decay.mp4"
+      - name: Upload test render
+        if: steps.detect.outputs.triggered == 'true' && inputs.demo
+        uses: actions/upload-artifact@v4
+        with:
+          name: decay-reel-demo
+          path: reels/auto/*.mp4
+      - name: Queue for Instagram and commit
+        if: steps.detect.outputs.triggered == 'true' && !inputs.demo
+        run: |
+          F="reels/auto/$(date +%F)-decay.mp4"
+          python3 reels_auto/queue_reel.py "$F"
+          git config user.name "dds-publisher"
+          git config user.email "actions@users.noreply.github.com"
+          git add reels/auto instagram/queue
+          git commit -m "Decay reel $(date +%F)"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break || sleep 5; done
