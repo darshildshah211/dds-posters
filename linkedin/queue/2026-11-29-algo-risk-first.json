@@ -1,0 +1,5 @@
+{
+  "publish_at": "2026-11-29T09:30:00+05:30",
+  "max_late_hours": 12,
+  "text": "Ask an F&O trader about their strategy and you'll get 20 minutes.\n\nAsk about their risk rules and you'll often get silence.\n\nIn my experience, serious traders can answer these five questions instantly:\n\n1. What's my maximum loss per day, and what happens when I hit it?\n2. What's the worst drawdown I'll accept before I stop the strategy?\n3. How do I size positions when volatility jumps?\n4. What does my algo do if the internet, the API or the broker goes down?\n5. Who or what hits the kill switch: me, or a rule?\n\nStrategy gives you returns. Risk management decides whether you're still around to collect them.\n\nThe traders I want to build with are the ones who think about the downside first.\n\nWhich of these five questions do most traders get wrong? Tell me below. 👇\n\n#AlgoTrading #FnO #OptionsTrading #NSE #StockMarketIndia #RiskManagement #TradingDiscipline #SeriousTraders\n\n—\nDarshil Shah | DDS Capital\nInvestments in the securities market are subject to market risks. Derivatives trading involves substantial risk of loss. This is not investment advice."
+}
