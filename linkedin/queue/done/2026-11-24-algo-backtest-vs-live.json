@@ -1,0 +1,7 @@
+{
+  "publish_at": "2026-11-24T09:30:00+05:30",
+  "max_late_hours": 12,
+  "text": "Your backtest made 80% a year. Your live account made 12%.\n\nThat gap is where most algo traders quietly give up. It usually comes from four places:\n\n1. Slippage: the backtest fills at the candle close, while the real market fills you wherever liquidity is.\n2. Costs: brokerage, STT, exchange charges, GST and stamp duty add up quickly on high-frequency strategies.\n3. Overfitting: too many parameters tuned to past data. The strategy learned history, not the market.\n4. Regime change: lot sizes, expiry days and margin rules have all changed in the last two years. A backtest from 2023 is trading a different market.\n\nWhat serious traders do differently:\n→ Forward-test with small size before scaling\n→ Model costs and slippage pessimistically\n→ Track live vs backtest results every week\n→ Kill strategies that stop behaving the way they were designed\n\nA strategy you can't explain is a strategy you can't trust.\n\nAlgo traders: what's the biggest gap you've seen between your backtest and live results?\n\n#AlgoTrading #FnO #OptionsTrading #NSE #StockMarketIndia #Backtesting #QuantTrading #RiskManagement\n\n—\nDarshil Shah | DDS Capital\nInvestments in the securities market are subject to market risks. Derivatives trading involves substantial risk of loss. This is not investment advice.",
+  "posted_id": "urn:li:share:7530956488303861760",
+  "posted_at": "2026-11-24T11:32:24.657740+00:00"
+}
