@@ -41,6 +41,27 @@ def tts(lines, voice, speed=0.92):
     return out
 
 
+def split_voice(path, n):
+    """Human recording: ONE take, one clear pause between script lines. Returns n clips (audio, sr) in order."""
+    import tempfile as _t
+    tmp = _t.mktemp(suffix=".wav"); subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", path, "-ac", "1", "-ar", "24000", tmp], check=True)
+    a, sr = sf.read(tmp, dtype="float32"); fr = int(0.02 * sr); nfr = len(a) // fr
+    rms = np.sqrt((a[:nfr * fr].reshape(nfr, fr) ** 2).mean(1)); thr = max(rms.max() * 0.03, 1e-4); sp = rms > thr
+    for gap in (0.45, 0.35, 0.3, 0.25, 0.2, 0.55, 0.65, 0.8):
+        segs, i, g = [], 0, int(gap / 0.02)
+        while i < nfr:
+            if sp[i]:
+                j = i; last = i
+                while j < nfr and (j - last) <= g:
+                    if sp[j]: last = j
+                    j += 1
+                segs.append((i, last)); i = last + 1
+            else: i += 1
+        segs = [(x, y) for x, y in segs if (y - x) * 0.02 > 0.25]
+        if len(segs) == n: return [(a[max(0, x - 2) * fr:(y + 3) * fr].copy(), sr) for x, y in segs]
+    raise RuntimeError(f"found {len(segs)} spoken parts but the script has {n} lines: re-record with a clear 1 second pause between lines")
+
+
 def timeline(spec, vd):
     """vd: dict key->voice duration. Returns events with times."""
     ev = []; t = 0.0; TY = spec.get("typing", 0.75); GAP = spec.get("gap", 0.4)
@@ -166,7 +187,10 @@ def main(spec_path, prefix, voices):
     keys = ["hook"] + [i for i, it in enumerate(spec["items"]) if it.get("voice")] + ["end"]
     texts = {"hook": spec["hook"]["voice"], "end": spec["end"]["voice"], **{i: spec["items"][i]["voice"] for i in keys if isinstance(i, int)}}
     auds = {}
-    for v in voices: auds[v] = dict(zip(keys, tts([texts[k] for k in keys], v, spec.get("speed", 0.92))))
+    if spec.get("voice_file"):
+        voices = ["human"]; auds["human"] = dict(zip(keys, split_voice(spec["voice_file"], len(keys))))
+    else:
+        for v in voices: auds[v] = dict(zip(keys, tts([texts[k] for k in keys], v, spec.get("speed", 0.92))))
     vd = {k: len(a) / sr for k, (a, sr) in auds[voices[0]].items()}   # timeline from first voice
     for v in voices[1:]:
         for k in keys: vd[k] = max(vd[k], len(auds[v][k][0]) / auds[v][k][1])
