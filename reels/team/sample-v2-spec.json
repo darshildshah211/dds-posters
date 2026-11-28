@@ -1,0 +1,10 @@
+{"title":"Salary aate hi gayab",
+"scenes":[
+{"kind":"hook","text":"*Salary* aate hi gayab ho jaati hai?","voice":"सैलरी आते ही गायब हो जाती है ना?"},
+{"kind":"say","speaker":"Beta","text":"Papa, har mahine salary *kahan* chali jaati hai?","voice":"पापा, हर महीने सैलरी कहाँ चली जाती है?"},
+{"kind":"say","speaker":"Papa","text":"Jo pehle alag nahi rakha, woh *kharch* ho jaata hai, beta.","voice":"जो पहले अलग नहीं रखा, वो खर्च हो जाता है, बेटा।"},
+{"kind":"say","speaker":"Beta","text":"Toh pehle kya karein?","voice":"तो पहले क्या करें?"},
+{"kind":"pain","label":"Aam galti","text":"Pehle kharcha, phir *bachat*. Isliye month-end tight.","voice":"आम गलती: पहले खर्चा, फिर बचत। इसलिए महीने के आख़िर में हाथ तंग रहता है।"},
+{"kind":"fix","label":"Ek chhoti aadat","text":"Pehle *apna hissa*. Phir baaki kharcha.","voice":"एक छोटी आदत: पहले अपना हिस्सा, फिर बाक़ी खर्चा।"},
+{"kind":"end","text":"Us dost ko bhejo jiski salary *gayab* ho jaati hai. Aapka month-end kaisa jaata hai?","voice":"उस दोस्त को भेजिए जिसकी सैलरी गायब हो जाती है। और बताइए, आपका महीना कैसे ख़त्म होता है? यह सिर्फ़ शिक्षा के लिए है, निवेश सलाह नहीं।"}
+]}

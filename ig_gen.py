@@ -12,7 +12,7 @@ GREY = (90, 90, 90)
 LIGHT = (200, 200, 200)
 M = 80
 F = "/usr/share/fonts/truetype/ibm-plex/"
-DISCLAIMER = ("AMFI-registered Mutual Fund Distributor, ARN-359084. Mutual fund investments "
+DISCLAIMER = ("AMFI Registered Mutual Fund Distributor (ARN-359084). Mutual fund investments "
               "are subject to market risks; read all scheme related documents carefully. "
               "For informational and educational purposes only; not investment advice.")
 
@@ -336,3 +336,18 @@ def story_news(path, topic, facts, takeaway, source, tag="IN THE NEWS"):
     d.text((M, min(y + 20, 1540)), "Source: " + source, font=MR(22), fill=GREY)
     footer(d, W, 1600)
     img.save(path)
+
+
+# ---- BRAND COLOUR (v2): navy / cream / turmeric / coral / green. Applied to any story PNG by exact-colour mapping.
+NAVY, CREAM, GOLD, CORAL, GREENC = (11, 31, 58), (255, 246, 229), (255, 180, 0), (255, 90, 95), (0, 168, 107)
+
+
+def brand(path, dark_to=NAVY, light_to=CREAM, top_dark=None, split_y=960):
+    """Recolour a monochrome story: BLACK->dark_to, WHITE->light_to (e.g. dark_to=CORAL for a myth block)."""
+    im = Image.open(path).convert("RGB"); px = im.load(); w, h = im.size
+    for y in range(h):
+        for x in range(w):
+            c = px[x, y]
+            if c == BLACK: px[x, y] = (top_dark if (top_dark and y < split_y) else dark_to)
+            elif c == WHITE: px[x, y] = light_to
+    im.save(path)

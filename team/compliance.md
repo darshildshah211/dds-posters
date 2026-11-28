@@ -4,6 +4,8 @@
 - Every rule, number, date, regulator statement: verified in >=2 reliable sources (SEBI/RBI/AMFI/NSE/BSE/government first). Arithmetic done in code. Illustrations labelled as illustrations.
 - News framing: "what happened / what it means for a family's long-term plan"; never "what to buy/sell now". No fear or greed language.
 - Polls/questions must not ask for personal financial data (amounts, holdings, account details). Ask about habits and goals only.
-- Disclaimer is on every frame; reel caption ends with: "AMFI-registered Mutual Fund Distributor, ARN-359084. Mutual fund investments are subject to market risks; read all scheme related documents carefully. For informational and educational purposes only; not investment advice."
+- Descriptor: write "AMFI Registered Mutual Fund Distributor (ARN-359084)" (SEBI disclosure framework effective 1 May 2026, as reported by Cafemutual; confirm against the SEBI circular). Registered name + ARN must be visible in the Instagram bio and on posts/videos.
+- Do NOT use the words "financial planning", "financial planner", "financial advice", "wealth adviser", "free advice", "free review", gifts or rebates. Do not show any AMC/scheme name or logo (needs AMC written approval and fund-house registration disclosure). Use "money habits", "goals", "plan" in the everyday sense only.
+- Disclaimer is on every frame; reel caption ends with: "AMFI Registered Mutual Fund Distributor (ARN-359084). Mutual fund investments are subject to market risks; read all scheme related documents carefully. For informational and educational purposes only; not investment advice."
 - No real person quoted or attributed; no photos of public figures; original music/voice only.
 - If in doubt: skip and notify.
