@@ -1,0 +1,10 @@
+{"speed":1.18,"typing":0.35,"gap":0.12,
+"hook":{"text":"Oye! Ek second. Future tera message aaya hai.","voice":"ओए! एक सेकंड! तेरे फ्यूचर का मैसेज आया है।"},
+"items":[
+{"who":"future","text":"Bro, ghar ka kharcha abhi 10k hai na?","voice":"ब्रो, घर का खर्चा अभी दस हज़ार है ना?"},
+{"who":"future","stat":{"a_label":"AAJ KA GHAR KHARCHA","a_value":"₹10,000 / month","b_label":"20 SAAL BAAD, SAME LIFESTYLE","b_to":32071,"b_prefix":"₹","note":"Example: har saal 6% mehngai maan kar. Forecast nahi, sirf maths."},"text":"","voice":"बीस साल बाद? सेम लाइफ़स्टाइल, तीस हज़ार से ऊपर!"},
+{"who":"me","text":"Wait, seriously?!"},
+{"who":"future","text":"Seriously. Bas ek date fix kar. Pehle apna hissa side mein.","voice":"सीरियसली। बस एक डेट फ़िक्स कर। पहले अपना हिस्सा साइड में।"},
+{"who":"future","text":"Shaadi season ho ya sale, date nahi hilti.","voice":"शादी का सीज़न हो या सेल, डेट नहीं हिलती।"}
+],
+"end":{"text":"Us dost ko bhej jo bolta hai 'paise kahan gaye?' Comment kar: teri date kaunsi hai?","voice":"उस दोस्त को भेज, जो हर महीने बोलता है, पैसे कहाँ गए? और कमेंट में बता, तेरी डेट कौन सी है? ये सिर्फ़ एजुकेशन के लिए है, सलाह नहीं।","button":"SAVE · SHARE · COMMENT"}}

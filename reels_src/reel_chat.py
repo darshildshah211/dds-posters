@@ -29,12 +29,12 @@ def wrap(text, font, width):
     return out + [cur]
 
 
-def tts(lines, voice):
+def tts(lines, voice, speed=0.92):
     from kokoro_onnx import Kokoro
     M_DIR = os.environ.get("REEL_MODELS", "/tmp/reel_models")
     k = Kokoro(f"{M_DIR}/kokoro-v1.0.onnx", f"{M_DIR}/voices-v1.0.bin"); out = []
     for ln in lines:
-        a, sr = k.create(ln, voice=voice, speed=0.92, lang="hi"); a = a.astype(np.float32)
+        a, sr = k.create(ln, voice=voice, speed=speed, lang="hi"); a = a.astype(np.float32)
         nz = np.where(np.abs(a) > 0.01)[0]; a = a[nz[0]:nz[-1] + 1] if len(nz) else a  # trim silence
         f = int(0.03 * sr); a[:f] *= np.linspace(0, 1, f); a[-f:] *= np.linspace(1, 0, f)
         out.append((a, sr))
@@ -43,15 +43,15 @@ def tts(lines, voice):
 
 def timeline(spec, vd):
     """vd: dict key->voice duration. Returns events with times."""
-    ev = []; t = 0.0
-    h = spec["hook"]; ev.append(dict(kind="hook", t=t, voice_at=0.4, vdur=vd["hook"], end=0.4 + vd["hook"] + 0.5)); t = ev[-1]["end"]
+    ev = []; t = 0.0; TY = spec.get("typing", 0.75); GAP = spec.get("gap", 0.4)
+    h = spec["hook"]; ev.append(dict(kind="hook", t=t, voice_at=0.2, vdur=vd["hook"], end=0.3 + vd["hook"] + 0.3)); t = ev[-1]["end"]
     for i, it in enumerate(spec["items"]):
         if it.get("voice"):
-            e = dict(kind="msg", who=it["who"], item=it, t=t, appear=t + 0.75, voice_at=t + 0.8, vdur=vd[i], end=t + 0.8 + vd[i] + 0.4)
+            e = dict(kind="msg", who=it["who"], item=it, t=t, appear=t + TY, voice_at=t + TY + 0.05, vdur=vd[i], end=t + TY + 0.05 + vd[i] + GAP)
         else:
-            e = dict(kind="msg", who=it["who"], item=it, t=t, appear=t + 0.55, voice_at=None, vdur=0, end=t + 1.25)
+            e = dict(kind="msg", who=it["who"], item=it, t=t, appear=t + 0.3, voice_at=None, vdur=0, end=t + 0.85)
         ev.append(e); t = e["end"]
-    e = spec["end"]; ev.append(dict(kind="end", t=t, voice_at=t + 0.6, vdur=vd["end"], end=t + 0.6 + vd["end"] + 1.2)); return ev
+    e = spec["end"]; ev.append(dict(kind="end", t=t, voice_at=t + 0.4, vdur=vd["end"], end=t + 0.4 + vd["end"] + 0.8)); return ev
 
 
 def bubble_size(it, d):
@@ -166,7 +166,7 @@ def main(spec_path, prefix, voices):
     keys = ["hook"] + [i for i, it in enumerate(spec["items"]) if it.get("voice")] + ["end"]
     texts = {"hook": spec["hook"]["voice"], "end": spec["end"]["voice"], **{i: spec["items"][i]["voice"] for i in keys if isinstance(i, int)}}
     auds = {}
-    for v in voices: auds[v] = dict(zip(keys, tts([texts[k] for k in keys], v)))
+    for v in voices: auds[v] = dict(zip(keys, tts([texts[k] for k in keys], v, spec.get("speed", 0.92))))
     vd = {k: len(a) / sr for k, (a, sr) in auds[voices[0]].items()}   # timeline from first voice
     for v in voices[1:]:
         for k in keys: vd[k] = max(vd[k], len(auds[v][k][0]) / auds[v][k][1])
