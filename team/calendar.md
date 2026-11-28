@@ -1,0 +1,6 @@
+# 12-week rotation (Content Director adjusts to the news; avoid repeats via team/log.csv)
+Tuesday reel (news): topic = hottest verified item of the week. If nothing passes the gate, use an evergreen concept explainer.
+Thursday reel alternates: odd weeks FAMILY STORY, even weeks CONCEPT EXPLAINER.
+Family story ideas: SIP date habit; the emergency-fund jar; school-fees goal; why we review on set dates; Dada's almirah vs a plan; the festival-season spending talk; first salary; the insurance conversation (educational only); handing the plan to the next generation; the "market fell today" dinner table.
+Concept explainers: what a SIP is; what NAV means; expense ratio in plain words; rebalancing; asset allocation by goals; inflation and why money must be planned; emergency fund sizing method; lump sum vs SIP (mechanics only); what a mutual fund factsheet shows; why leverage is risky; how to read a SEBI/AMFI notice; goal-based investing.
+Sunday set: myth-vs-fact (rotate: timing the market, "SIP is only for small money", "more funds = safer", "NAV low = cheap", "FD is zero risk", "check daily"); poll about habits/goals; question of the week; plan-check quote (a fresh line, check stories/log.csv).

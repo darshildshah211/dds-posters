@@ -1,0 +1,10 @@
+{"title":"Why the same SIP date every month",
+ "scenes":[
+ {"kind":"hook","text":"Why does Papa pick the same date every month?"},
+ {"kind":"say","speaker":"Beta","text":"Papa, why the same SIP date every month?"},
+ {"kind":"say","speaker":"Papa","text":"Because a habit works better than a mood, beta."},
+ {"kind":"say","speaker":"Beta","text":"And if the news looks scary that week?"},
+ {"kind":"say","speaker":"Papa","text":"Then we read our plan first, not the headlines."},
+ {"kind":"point","label":"Remember","text":"A fixed date turns investing from a decision into a routine."},
+ {"kind":"end","text":"Start. Stay. Review. Educational only, not investment advice.","voice":"Start. Stay. Review. This is for education only, and not investment advice."}
+ ]}

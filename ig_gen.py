@@ -253,3 +253,86 @@ if __name__ == "__main__":
     {"feed_hero": feed_hero, "feed_checklist": feed_checklist,
      "feed_scoreboard": feed_scoreboard, "story_quote": story_quote,
      "story_ipo": story_ipo}[kind](out, **spec)
+
+
+# ================= TEAM TEMPLATES (varied story formats) =================
+def _story_head(d, W, fg, label="DDS CAPITAL WEALTH", tag=None):
+    tracked(d, (M, 280), label, MM(24), fg)
+    if tag:
+        tw = sum(d.textlength(c, font=MM(20)) + 3 for c in tag)
+        d.rectangle([W - M - tw - 28, 272, W - M, 316], outline=fg, width=2)
+        tracked(d, (W - M - tw - 14, 282), tag, MM(20), fg)
+    d.line([(M, 322), (W - M, 322)], fill=fg, width=2)
+
+
+def story_poll(path, question, option_a, option_b, note="Reply to this story with A or B"):
+    """White poll frame. Instagram's API cannot attach native poll stickers, so this is a reply-to-vote frame."""
+    img = story_canvas(WHITE); d = ImageDraw.Draw(img); W = 1080
+    _story_head(d, W, BLACK, tag="POLL")
+    qf = SB(64); lines = wrap(d, question, qf, W - 2 * M)
+    y = 420
+    for ln in lines:
+        d.text((M, y), ln, font=qf, fill=BLACK); y += 84
+    y += 60
+    for tag, txt, inv in (("A", option_a, False), ("B", option_b, True)):
+        h = 250
+        bg, fg = (BLACK, WHITE) if inv else (WHITE, BLACK)
+        d.rectangle([M, y, W - M, y + h], fill=bg, outline=BLACK, width=4)
+        d.text((M + 36, y + 30), tag, font=SB(120), fill=fg)
+        ty = y + 50
+        for ln in wrap(d, txt, SS(40), W - 2 * M - 230)[:3]:
+            d.text((M + 190, ty), ln, font=SS(40), fill=fg); ty += 54
+        y += h + 40
+    d.text((M, y + 20), note, font=SI(32), fill=GREY)
+    footer(d, W, 1600)
+    img.save(path)
+
+
+def story_myth(path, myth, fact, tag="MYTH VS FACT"):
+    """Top half black MYTH, bottom half white FACT."""
+    img = story_canvas(WHITE); d = ImageDraw.Draw(img); W = 1080
+    d.rectangle([0, 0, W, 960], fill=BLACK)
+    _story_head(d, W, WHITE, tag=tag)
+    tracked(d, (M, 420), "MYTH", MM(30), LIGHT, tr=6)
+    y = para(d, M, 480, myth, SB(58), WHITE, W - 2 * M, 78)
+    d.line([(M, 1010), (M + 110, 1010)], fill=BLACK, width=6)
+    tracked(d, (M, 1040), "FACT", MM(30), GREY, tr=6)
+    para(d, M, 1100, fact, SS(46), BLACK, W - 2 * M, 66)
+    footer(d, W, 1600)
+    img.save(path)
+
+
+def story_question(path, prompt, hint="Send your answer as a reply. We read every one."):
+    img = story_canvas(BLACK); d = ImageDraw.Draw(img); W = 1080
+    _story_head(d, W, WHITE, tag="YOUR TURN")
+    tracked(d, (M, 520), "QUESTION OF THE WEEK", MM(26), LIGHT, tr=5)
+    qf = SI(66); y = 600
+    for ln in wrap(d, prompt, qf, W - 2 * M):
+        d.text((M, y), ln, font=qf, fill=WHITE); y += 90
+    y += 50
+    d.rounded_rectangle([M, y, W - M, y + 130], radius=65, outline=WHITE, width=3)
+    d.text((M + 50, y + 40), "Type your reply here…", font=SI(34), fill=(150, 150, 150))
+    d.text((M, y + 175), hint, font=MR(24), fill=LIGHT)
+    footer(d, W, 1600, fg=WHITE, sub=(150, 150, 150))
+    img.save(path)
+
+
+def story_news(path, topic, facts, takeaway, source, tag="IN THE NEWS"):
+    """Current-affairs explainer: headline, up to 3 verified facts, plain-language takeaway, named source."""
+    img = story_canvas(WHITE); d = ImageDraw.Draw(img); W = 1080
+    _story_head(d, W, BLACK, tag=tag)
+    y = para(d, M, 400, topic, SB(60), BLACK, W - 2 * M, 80) + 30
+    for i, f in enumerate(facts[:3], 1):
+        d.rectangle([M, y, M + 70, y + 70], fill=BLACK)
+        d.text((M + 22, y + 10), str(i), font=SB(44), fill=WHITE)
+        lines = wrap(d, f, SS(38), W - 2 * M - 110)
+        for j, ln in enumerate(lines[:3]):
+            d.text((M + 100, y + 4 + j * 50), ln, font=SS(38), fill=BLACK)
+        y += max(90, 50 * min(3, len(lines)) + 20) + 24
+    y += 10
+    d.line([(M, y), (W - M, y)], fill=BLACK, width=3)
+    tracked(d, (M, y + 26), "WHAT IT MEANS", MM(22), GREY, tr=4)
+    y = para(d, M, y + 66, takeaway, SI(40), BLACK, W - 2 * M, 56)
+    d.text((M, min(y + 20, 1540)), "Source: " + source, font=MR(22), fill=GREY)
+    footer(d, W, 1600)
+    img.save(path)
