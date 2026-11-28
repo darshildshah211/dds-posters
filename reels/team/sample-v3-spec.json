@@ -1,0 +1,10 @@
+{"hook":{"text":"Suno. Ek zaroori baat. Sirf ek minute.","voice":"साठ साल के आपने, आपको एक मैसेज भेजा है। ज़रा सुनिए।"},
+"items":[
+{"who":"future","text":"Suno. Bas ek minute lagega.","voice":"सुनो, बस एक मिनट लगेगा।"},
+{"who":"future","text":"Aaj aap ghar ka kharcha das hazaar rupaye mahina maante ho, hai na?","voice":"आज आप घर का खर्चा दस हज़ार रुपये महीना मानते हो, है ना?"},
+{"who":"future","stat":{"a_label":"AAJ KA GHAR KHARCHA","a_value":"₹10,000 / mahina","b_label":"20 SAAL BAAD, WAHI KHARCHA","b_to":32071,"b_prefix":"₹","note":"Udaharan: har saal 6% mehngai maan kar. Yeh anumaan nahi, sirf ganit hai."},"text":"","voice":"बीस साल में, अगर हर साल छह प्रतिशत महँगाई मान लें, तो वही खर्चा लगभग बत्तीस हज़ार रुपये हो जाता है। यह अनुमान नहीं है, सिर्फ़ गणित का एक उदाहरण है।"},
+{"who":"me","text":"Toh main kya karun?"},
+{"who":"future","text":"Kuch bada nahi. Bas ek tareekh tay karo, jis din mahine ka pehla hissa apne bhavishya ke naam jaaye.","voice":"कुछ बड़ा नहीं करना। बस एक तारीख़ तय करो, जिस दिन महीने का पहला हिस्सा अपने भविष्य के नाम जाए।"},
+{"who":"future","text":"Aur haan, shaadiyon ke season mein bhi.","voice":"और हाँ, शादियों के मौसम में भी।"}
+],
+"end":{"text":"Yeh message us dost ko bhejo jise iski zaroorat hai. Comment karo: aap apna pehla hissa mahine ki kis tareekh ko alag karte ho?","voice":"यह मैसेज उस दोस्त को भेजिए जिसे इसकी ज़रूरत है। और बताइए, आप अपना पहला हिस्सा महीने की किस तारीख़ को अलग करते हैं? यह सिर्फ़ शिक्षा के लिए है, निवेश की सलाह नहीं।","button":"SAVE · SHARE · COMMENT"}}
