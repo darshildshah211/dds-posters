@@ -187,12 +187,17 @@ def main(spec_path, prefix, voices):
     keys = ["hook"] + [i for i, it in enumerate(spec["items"]) if it.get("voice")] + ["end"]
     texts = {"hook": spec["hook"]["voice"], "end": spec["end"]["voice"], **{i: spec["items"][i]["voice"] for i in keys if isinstance(i, int)}}
     auds = {}
-    if spec.get("voice_file"):
+    if spec.get("silent"):
+        voices = ["silent"]; auds["silent"] = {}
+        vd = {"hook": 2.4, "end": 4.6}
+        for k in keys:
+            if isinstance(k, int): it = spec["items"][k]; vd[k] = 5.0 if it.get("stat") else max(1.7, 0.06 * len(it.get("text", "")) + 1.0)
+    elif spec.get("voice_file"):
         voices = ["human"]; auds["human"] = dict(zip(keys, split_voice(spec["voice_file"], len(keys))))
     else:
         for v in voices: auds[v] = dict(zip(keys, tts([texts[k] for k in keys], v, spec.get("speed", 0.92))))
-    vd = {k: len(a) / sr for k, (a, sr) in auds[voices[0]].items()}   # timeline from first voice
-    for v in voices[1:]:
+    if not spec.get("silent"): vd = {k: len(a) / sr for k, (a, sr) in auds[voices[0]].items()}   # timeline from first voice
+    for v in (voices[1:] if not spec.get("silent") else []):
         for k in keys: vd[k] = max(vd[k], len(auds[v][k][0]) / auds[v][k][1])
     ev = timeline(spec, vd); items = build_layout(ev); total = ev[-1]["end"]
     vid = f"{work}/v.mp4"
@@ -205,14 +210,24 @@ def main(spec_path, prefix, voices):
     tt = np.arange(int(total * SR) + SR) / SR
     for v in voices:
         mix = np.zeros(len(tt), np.float32)
-        for k in keys:
+        for k in ([] if spec.get("silent") else keys):
             a, sr = auds[v][k]; a = np.interp(np.linspace(0, len(a), int(len(a) * SR / sr), endpoint=False), np.arange(len(a)), a).astype(np.float32)
             i = int(starts[k] * SR); mix[i:i + len(a)] += a
         for e in ev:
             if e["kind"] == "msg":
                 b = np.arange(int(0.09 * SR)) / SR; i = int(e["appear"] * SR); mix[i:i + len(b)] += (0.12 * np.sin(2 * np.pi * (880 if e["who"] == "future" else 660) * b) * np.exp(-b * 38)).astype(np.float32)
+        beat = np.zeros(len(tt), np.float32)
+        if spec.get("silent"):  # soft beat so a silent reel still has energy
+            bt = 60 / spec.get("bpm", 104)
+            for n in range(int(total / bt) + 1):
+                i = int(n * bt * SR); b = np.arange(int(0.18 * SR)) / SR
+                if i + len(b) < len(beat):
+                    beat[i:i + len(b)] += (0.22 * np.sin(2 * np.pi * (70 - 25 * b / 0.18) * b) * np.exp(-b * 20)).astype(np.float32)
+                    j = i + int(bt * SR / 2); h = np.random.default_rng(n).standard_normal(int(0.04 * SR)).astype(np.float32)
+                    if j + len(h) < len(beat): beat[j:j + len(h)] += 0.025 * h * np.exp(-np.arange(len(h)) / (0.01 * SR))
+            beat *= np.minimum(1, np.minimum(tt, total - tt) / 1.5)
         bed = sum(a * np.sin(2 * np.pi * f * tt) for f, a in ((130.8, .5), (196, .35), (261.6, .3), (329.6, .2))) * 0.035 * np.minimum(1, np.minimum(tt, total - tt) / 1.0)
-        env = np.convolve(np.abs(mix) > 0.03, np.ones(SR // 5) / (SR // 5), "same"); mix = np.clip(mix + bed * (1 - 0.6 * np.clip(env, 0, 1)), -1, 1)
+        env = np.convolve(np.abs(mix) > 0.03, np.ones(SR // 5) / (SR // 5), "same"); mix = np.clip(mix + beat + bed * (1 - 0.6 * np.clip(env, 0, 1)), -1, 1)
         wav = f"{work}/{v}.wav"; sf.write(wav, mix, SR); out = f"{prefix}-{v}.mp4"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", vid, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", out], check=True)
         print("OK", out, f"{total:.1f}s")
